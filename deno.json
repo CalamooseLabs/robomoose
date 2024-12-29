@@ -1,6 +1,15 @@
 {
+  "name": "@calamooselabs/robomoose",
+  "description": "A CLI tool for creating and managing your apps.",
+  "version": "0.0.1",
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "ascii": "deno run --allow-read --allow-run src/utils/ascii-converter.ts"
+  },
+  "exports": {
+    ".`": "src/mod.ts"
+  },
+  "imports": {
+    "@imagemagick/magick-wasm": "npm:@imagemagick/magick-wasm@0.0.32"
   },
   "lock": false
 }

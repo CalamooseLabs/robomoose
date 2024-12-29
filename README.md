@@ -29,6 +29,7 @@
 Using this CLI tool...
 
 1. **Step One**
+
    ```typescript
    console.log("Step One");
    ```
@@ -37,7 +38,6 @@ Using this CLI tool...
    ```typescript
    console.log("Step Two");
    ```
-
 
 ## License
 
@@ -51,8 +51,5 @@ Internal App is open-source software licensed under the MIT License.
 
 ## TODO
 
-- [ ] Create the Builder class to handle the transpile and build process.
-- [ ] Create the Loader class to handle the loading of the modules from the producer servers.
-- [ ] Create the Watcher class to handle the watching of the files and triggering the builder to create the new modules.
-
-
+- [ ] Create the install script, either using shell script or Deno run script.
+- [ ] Create the kintsugi command which will start with the arguments of fixImports, which will create the .robomoose/kinstsugi folder which will resolve the blank imports for kintsugi, for the editor. It will also add the .robomoose to .gitignore.
