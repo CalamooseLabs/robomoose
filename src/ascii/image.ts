@@ -12,6 +12,8 @@ import {
   MagickFormat,
 } from "@imagemagick/magick-wasm";
 
+import { DenoDir } from "@deno/cache-dir";
+
 // ASCII characters arranged from darkest to lightest for grayscale mapping
 const ASCII_CHARS = "@%#*+=-:. ";
 
@@ -127,45 +129,11 @@ class BMPDecoder {
  * Locates the ImageMagick WebAssembly file in the Deno cache
  * Uses Deno's package information commands to find the correct path
  */
-async function findMagickWasm(): Promise<string> {
-  const decoder = new TextDecoder();
-
-  // Get package information
-  const { stdout: infoJson, stderr } = await new Deno.Command(Deno.execPath(), {
-    args: ["info", "--json", "npm:@imagemagick/magick-wasm"],
-  }).output();
-
-  if (!infoJson) {
-    throw new Error(`Failed to get package info: ${decoder.decode(stderr)}`);
-  }
-
-  const info = JSON.parse(decoder.decode(infoJson));
-
-  // Get cache location
-  const { stdout: cacheJson } = await new Deno.Command(Deno.execPath(), {
-    args: ["info", "--json"],
-  }).output();
-
-  const localInfo = JSON.parse(decoder.decode(cacheJson));
-  const cachePath = localInfo.npmCache;
-
-  // Find the package in modules
-  let packageName: string | undefined;
-  if (Array.isArray(info.modules)) {
-    packageName = info.modules.find((module: { specifier: string }) =>
-      module.specifier.includes("npm:/@imagemagick/magick-wasm")
-    )?.npmPackage;
-  }
-
-  if (!packageName) {
-    throw new Error("Could not find the magick.wasm package");
-  }
-
+function findMagickWasm(): string {
   // Construct wasm file path
-  const packageInfo = info.npmPackages[packageName];
-  return `${cachePath}/${
-    packageInfo.registryUrl.replace(/https?:\/\//, "")
-  }${packageInfo.name}/${packageInfo.version}/dist/magick.wasm`;
+  const denoDir = new DenoDir();
+
+  return `${denoDir.root}/npm/registry.npmjs.org/@imagemagick/magick-wasm/0.0.32/dist/magick.wasm`;
 }
 
 /**
@@ -186,7 +154,8 @@ async function imageToAscii(
 ): Promise<string> {
   try {
     // Initialize ImageMagick with WebAssembly
-    const wasm = await Deno.readFile(await findMagickWasm());
+    const wasm = await Deno.readFile(findMagickWasm());
+
     await initializeImageMagick(wasm);
 
     // Process image with ImageMagick

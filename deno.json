@@ -3,13 +3,20 @@
   "description": "A CLI tool for creating and managing your apps.",
   "version": "0.0.1",
   "tasks": {
-    "ascii": "deno run --allow-read --allow-run src/utils/ascii-converter.ts"
+    "ascii": "deno run --allow-read --allow-env=\"DENO_DIR,XDG_CACHE_HOME\" src/ascii/image.ts"
   },
   "exports": {
     ".`": "src/mod.ts"
   },
   "imports": {
-    "@imagemagick/magick-wasm": "npm:@imagemagick/magick-wasm@0.0.32"
+    "@imagemagick/magick-wasm": "npm:@imagemagick/magick-wasm@0.0.32",
+    "@deno/cache-dir": "jsr:@deno/cache-dir",
+    "#ansi": "./src/ansi/mod.ts",
+    "#ascii": "./src/ascii/mod.ts",
+    "#colors": "./src/colors/mod.ts",
+    "#page": "./src/page/mod.ts",
+    "#router": "./src/router/mod.ts",
+    "#terminal": "./src/terminal/mod.ts"
   },
   "lock": false
 }
