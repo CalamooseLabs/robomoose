@@ -26,7 +26,7 @@
 
 ### CLI
 
-Using this CLI tool...
+Using this CLI tool
 
 1. **Step One**
 
