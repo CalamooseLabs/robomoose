@@ -89,9 +89,7 @@ export class Router {
       await this.handleInput();
     } finally {
       await this.term.write(ANSI.SHOW_CURSOR + ANSI.EXIT_ALT_SCREEN);
-      if (this.term.wasRaw) {
-        this.term.stdin.setRaw(false);
-      }
+      this.term.stdin.setRaw(this.term.previousRawMode);
     }
   }
 }

@@ -1,5 +1,5 @@
 // pages/network.ts
-import { style } from "#colors";
+import { rgb, style } from "#colors";
 
 import type { Terminal } from "#terminal";
 import type { Page } from "#page";
@@ -15,7 +15,7 @@ export class NetworkPage implements Page {
     ];
 
     await term.write(
-      style("\nNetwork Statistics\n", ["bold", "yellow"]),
+      style("\nNetwork Statistics\n", ["bold", rgb(255, 255, 0)]),
     );
     await term.renderTable(headers, rows);
   }

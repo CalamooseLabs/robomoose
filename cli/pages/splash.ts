@@ -7,7 +7,7 @@ export class SplashPage implements Page {
   title = "Splash";
 
   async render(term: Terminal): Promise<void> {
-    const { rows } = await term.getSize();
+    const { rows } = term.getSize();
 
     const content = [
       ...LOGO,

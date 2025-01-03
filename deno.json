@@ -3,7 +3,8 @@
   "description": "A CLI tool for creating and managing your apps.",
   "version": "0.0.1",
   "tasks": {
-    "ascii": "deno run --allow-read --allow-env=\"DENO_DIR,XDG_CACHE_HOME\" src/ascii/image.ts"
+    "ascii": "deno run --allow-env=\"DENO_DIR,XDG_CACHE_HOME\" src/ascii/image.ts",
+    "start": "deno run --allow-env=\"FORCE_COLOR,NO_COLOR,TERM\" ./cli/main.ts"
   },
   "exports": {
     ".`": "src/mod.ts"
@@ -14,9 +15,20 @@
     "#ansi": "./src/ansi/mod.ts",
     "#ascii": "./src/ascii/mod.ts",
     "#colors": "./src/colors/mod.ts",
+    "#markdown": "./src/markdown/mod.ts",
     "#page": "./src/page/mod.ts",
     "#router": "./src/router/mod.ts",
     "#terminal": "./src/terminal/mod.ts"
   },
-  "lock": false
+  "lock": false,
+  "permissions": {
+    "read": true,
+    "env": {
+      "DENO_DIR": true,
+      "XDG_CACHE_HOME": true,
+      "FORCE_COLOR": true,
+      "NO_COLOR": true,
+      "TERM": true
+    }
+  }
 }

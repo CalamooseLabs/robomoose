@@ -22,3 +22,9 @@ export const BOX = {
   horizontalUp: "┴",
   cross: "┼",
 };
+
+export const LINES = {
+  single: "─",
+  double: "═",
+  triple: "━",
+};

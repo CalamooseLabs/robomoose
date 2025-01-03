@@ -1,5 +1,10 @@
 // colors.ts
 
+const supportsColor = Deno.env.get("FORCE_COLOR") !== "0" &&
+  !Deno.env.get("NO_COLOR") &&
+  Deno.env.get("TERM") !== "dumb" &&
+  Deno.stdout.isTerminal;
+
 const ANSI_STYLES = {
   // Text styles
   reset: "\x1b[0m",
@@ -53,8 +58,51 @@ const ANSI_STYLES = {
   bgBrightWhite: "\x1b[107m",
 } as const;
 
-type StyleName = keyof typeof ANSI_STYLES;
-type Styles = StyleName | StyleName[];
+export type StyleName = keyof typeof ANSI_STYLES;
+export type RGBColor = {
+  type: "rgb" | "bgRgb";
+  r: number;
+  g: number;
+  b: number;
+};
+export type StyleOption = StyleName | RGBColor;
+export type Styles = StyleOption | StyleOption[];
+
+export const rgb = (r: number, g: number, b: number): RGBColor => ({
+  type: "rgb",
+  r,
+  g,
+  b,
+});
+
+export const bgRgb = (r: number, g: number, b: number): RGBColor => ({
+  type: "bgRgb",
+  r,
+  g,
+  b,
+});
+
+// Helper function to get ANSI code for a style
+function getStyleCode(style: StyleOption): string {
+  if (typeof style === "string") {
+    if (!ANSI_STYLES[style]) {
+      throw new Error(`Invalid style: ${style}`);
+    }
+    return ANSI_STYLES[style];
+  } else {
+    // Handle RGB colors
+    if (style.type === "rgb") {
+      return supportsColor
+        ? `\x1b[38;2;${style.r};${style.g};${style.b}m`
+        : ANSI_STYLES.white;
+    } else if (style.type === "bgRgb") {
+      return supportsColor
+        ? `\x1b[48;2;${style.r};${style.g};${style.b}m`
+        : ANSI_STYLES.bgWhite;
+    }
+    throw new Error("Invalid style object");
+  }
+}
 
 /**
  * Applies one or more styles to text and automatically resets afterward
@@ -64,15 +112,7 @@ type Styles = StyleName | StyleName[];
  */
 export function style(text: string, styles: Styles): string {
   const styleArray = Array.isArray(styles) ? styles : [styles];
-
-  // Validate styles
-  for (const style of styleArray) {
-    if (!ANSI_STYLES[style]) {
-      throw new Error(`Invalid style: ${style}`);
-    }
-  }
-
-  const styleStr = styleArray.map((s) => ANSI_STYLES[s]).join("");
+  const styleStr = styleArray.map(getStyleCode).join("");
   return `${styleStr}${text}${ANSI_STYLES.reset}`;
 }
 
