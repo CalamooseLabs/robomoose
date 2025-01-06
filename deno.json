@@ -4,7 +4,9 @@
   "version": "0.0.1",
   "tasks": {
     "ascii": "deno run --allow-env=\"DENO_DIR,XDG_CACHE_HOME\" src/ascii/image.ts",
-    "start": "deno run --allow-env=\"FORCE_COLOR,NO_COLOR,TERM\" ./cli/main.ts"
+    "start": "deno run --allow-env=\"FORCE_COLOR,NO_COLOR,TERM\" ./cli/main.ts",
+    "numToText": "deno run src/utils/numToText.ts",
+    "textToAscii": "deno run --allow-read=\"./src/font/fonts\" src/font/font.ts"
   },
   "exports": {
     ".`": "src/mod.ts"
@@ -12,6 +14,7 @@
   "imports": {
     "@imagemagick/magick-wasm": "npm:@imagemagick/magick-wasm@0.0.32",
     "@deno/cache-dir": "jsr:@deno/cache-dir",
+    "@std/path": "jsr:@std/path",
     "#ansi": "./src/ansi/mod.ts",
     "#ascii": "./src/ascii/mod.ts",
     "#colors": "./src/colors/mod.ts",

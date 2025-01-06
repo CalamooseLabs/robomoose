@@ -137,6 +137,40 @@ export const colors = {
   black: (text: string) => style(text, "black"),
 } as const;
 
+/**
+ * Creates a generator that produces a gradient of colors between two points
+ * @param fromColor Starting RGB color
+ * @param toColor Ending RGB color
+ * @param steps Number of color steps to generate (inclusive of start and end colors)
+ * @returns Generator that yields each color in the gradient
+ */
+export function* gradient(
+  fromColor: RGBColor,
+  toColor: RGBColor,
+  steps: number,
+): Generator<RGBColor> {
+  if (steps < 2) {
+    throw new Error("Steps must be at least 2");
+  }
+
+  const stepCount = steps - 1; // Number of intervals between colors
+
+  for (let i = 0; i < steps; i++) {
+    const ratio = i / stepCount;
+
+    const r = Math.round(fromColor.r + (toColor.r - fromColor.r) * ratio);
+    const g = Math.round(fromColor.g + (toColor.g - fromColor.g) * ratio);
+    const b = Math.round(fromColor.b + (toColor.b - fromColor.b) * ratio);
+
+    yield {
+      type: fromColor.type, // Maintain the same color type (rgb or bgRgb)
+      r: Math.min(255, Math.max(0, r)),
+      g: Math.min(255, Math.max(0, g)),
+      b: Math.min(255, Math.max(0, b)),
+    };
+  }
+}
+
 // Example usage:
 // import { style, createStyler, colors } from "./colors.ts";
 //
